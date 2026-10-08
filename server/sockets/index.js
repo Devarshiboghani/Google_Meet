@@ -6,7 +6,6 @@ const SharedFile = require('../models/SharedFile');
 
 let io;
 
-// Basic in-memory storage for active meeting rooms and participants
 const activeRooms = new Map();
 
 const initializeSocket = (server) => {

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  // Setup proper connection events
   mongoose.connection.on('connected', () => {
     console.log('MongoDB connected successfully');
   });
@@ -19,7 +18,7 @@ const connectDB = async () => {
     return conn;
   } catch (error) {
     console.error(`MongoDB connection failed: ${error.message}`);
-    throw error; // Rethrow to prevent server startup
+    throw error; 
   }
 };
 

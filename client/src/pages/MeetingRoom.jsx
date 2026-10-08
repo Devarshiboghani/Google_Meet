@@ -47,7 +47,6 @@ const MeetingRoom = () => {
   const [systemAlert, setSystemAlert] = useState(null); // Used for host alerts
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // We only trigger the Socket/WebRTC connections once the user physically clicks Join
   const actuallyReadyToJoin = isReadyToJoin && hasJoined;
 
   const { 
@@ -66,7 +65,7 @@ const MeetingRoom = () => {
   
   const { remoteStreams, replaceVideoTrack } = useWebRTC(stream, isConnected);
 
-  const currentUserHost = currentUser.id === id; // In a real app, verify from DB
+  const currentUserHost = currentUser.id === id; 
 
   // Show a toast notification helper
   const [notificationsState, setNotificationsState] = useState([]);
@@ -81,22 +80,20 @@ const MeetingRoom = () => {
   
   const combinedNotifications = [...notifications, ...notificationsState];
 
-  // Prevent accidental leaving
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
-      e.returnValue = ''; // Trigger native browser confirmation
+      e.returnValue = ''; 
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  // Setup Host Control Listeners
   useEffect(() => {
     socket.on('host-muted-you', () => {
-      toggleAudio(false); // Force mute hardware
-      setIsMuted(true);   // Update UI
-      toggleRemoteMedia(id, 'audio', false); // Tell others
+      toggleAudio(false); 
+      setIsMuted(true);   
+      toggleRemoteMedia(id, 'audio', false); 
       setSystemAlert("The host has muted your microphone.");
     });
 
@@ -121,7 +118,6 @@ const MeetingRoom = () => {
     };
   }, [id, toggleAudio, toggleRemoteMedia]);
 
-  // Broadcast initial hardware state upon joining room
   useEffect(() => {
     if (isConnected && hasJoined) {
       toggleRemoteMedia(id, 'audio', !isMuted);
@@ -129,7 +125,6 @@ const MeetingRoom = () => {
     }
   }, [isConnected, hasJoined]);
 
-  // Current Time for Footer
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -280,7 +275,6 @@ const MeetingRoom = () => {
     );
   }
 
-  // Filter out ourselves from the remote participants list
   const remoteParticipants = participants.filter(p => p.socketId !== socket.id);
   const localMediaState = { audio: !isMuted, video: !isVideoOff, screen: isScreenSharing, hand: isHandRaised };
 

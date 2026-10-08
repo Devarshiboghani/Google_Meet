@@ -5,8 +5,7 @@ const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 const { protect } = require('../middleware/authMiddleware');
 
-// @route   POST /api/auth/register
-// @desc    Register a new user
+// POST            /api/auth/register
 router.post('/register', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -45,8 +44,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// @route   POST /api/auth/login
-// @desc    Auth user & get token
+// POST            /api/auth/login
 router.post('/login', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -80,9 +78,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// @route   GET /api/auth/me
-// @desc    Get current user profile
-// @access  Private
+// GET           /api/auth/me
 router.get('/me', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');

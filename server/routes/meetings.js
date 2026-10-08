@@ -7,8 +7,7 @@ const SharedFile = require('../models/SharedFile');
 const MeetingRecording = require('../models/MeetingRecording');
 const { protect } = require('../middleware/authMiddleware');
 
-// @route   GET /api/meetings/recent
-// @desc    Get user's recent meetings
+// GET      /api/meetings/recent
 router.get('/recent', protect, async (req, res) => {
   try {
     const participations = await MeetingParticipant.find({ user: req.user._id })
@@ -24,8 +23,7 @@ router.get('/recent', protect, async (req, res) => {
   }
 });
 
-// @route   GET /api/meetings/history
-// @desc    Get complete meeting history
+// GET        /api/meetings/history
 router.get('/history', protect, async (req, res) => {
   try {
     const participations = await MeetingParticipant.find({ user: req.user._id })
@@ -39,8 +37,7 @@ router.get('/history', protect, async (req, res) => {
   }
 });
 
-// @route   GET /api/meetings/my-recordings
-// @desc    Get all recordings saved by the current user
+// GET           /api/meetings/my-recordings
 router.get('/my-recordings', protect, async (req, res) => {
   try {
     const recordings = await MeetingRecording.find({ user: req.user._id })
@@ -52,8 +49,7 @@ router.get('/my-recordings', protect, async (req, res) => {
   }
 });
 
-// @route   GET /api/meetings/:id
-// @desc    Get specific meeting details including chat and participants
+//GET           /api/meetings/:id
 router.get('/:id', protect, async (req, res) => {
   try {
     const meeting = await Meeting.findOne({ meetingId: req.params.id }).populate('host', 'name email avatar');
@@ -75,8 +71,7 @@ router.get('/:id', protect, async (req, res) => {
   }
 });
 
-// @route   GET /api/meetings/:id/recordings
-// @desc    Get recordings for a meeting
+// GET            /api/meetings/:id/recordings
 router.get('/:id/recordings', protect, async (req, res) => {
   try {
     const meeting = await Meeting.findOne({ meetingId: req.params.id });
@@ -89,8 +84,7 @@ router.get('/:id/recordings', protect, async (req, res) => {
   }
 });
 
-// @route   POST /api/meetings/:id/recordings
-// @desc    Save a recording metadata for a meeting
+// POST          /api/meetings/:id/recordings
 router.post('/:id/recordings', protect, async (req, res) => {
   try {
     const meeting = await Meeting.findOne({ meetingId: req.params.id });

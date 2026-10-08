@@ -9,6 +9,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0f172a; /* Tailwind slate-900 */
+  background-color: #0f172a; 
   color: white;
 }

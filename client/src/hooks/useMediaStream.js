@@ -15,14 +15,12 @@ export const useMediaStream = (audio = true, video = true) => {
     const startStream = async () => {
       try {
         setIsLoading(true);
-        // Request access to hardware via browser native API
         const mediaStream = await navigator.mediaDevices.getUserMedia({
           audio,
           video
         });
         currentStream = mediaStream;
         
-        // Save the camera track so we can switch back to it after screen sharing
         cameraTrackRef.current = mediaStream.getVideoTracks()[0];
         
         setStream(mediaStream);
@@ -77,26 +75,21 @@ export const useMediaStream = (audio = true, video = true) => {
     return false;
   };
 
-  // --- SCREEN SHARING LOGIC ---
 
   const startScreenShare = async (replaceVideoTrackCallback) => {
     try {
-      // 1. Prompt browser for screen share selection
       const displayStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
       const screenTrack = displayStream.getVideoTracks()[0];
       screenTrackRef.current = screenTrack;
 
-      // 2. Handle when user clicks the native browser "Stop sharing" floating button
       screenTrack.onended = () => {
         stopScreenShare(replaceVideoTrackCallback);
       };
 
-      // 3. Swap the track in WebRTC RTCPeerConnections (send to others)
       if (replaceVideoTrackCallback) {
         await replaceVideoTrackCallback(screenTrack);
       }
 
-      // 4. Swap the track in our local UI stream (show to ourselves)
       if (stream) {
         stream.removeTrack(stream.getVideoTracks()[0]);
         stream.addTrack(screenTrack);
@@ -115,12 +108,10 @@ export const useMediaStream = (audio = true, video = true) => {
     }
 
     if (cameraTrackRef.current && stream) {
-      // 1. Swap WebRTC track back to the camera
       if (replaceVideoTrackCallback) {
         await replaceVideoTrackCallback(cameraTrackRef.current);
       }
 
-      // 2. Swap local UI stream back to the camera
       stream.removeTrack(stream.getVideoTracks()[0]);
       stream.addTrack(cameraTrackRef.current);
     }
